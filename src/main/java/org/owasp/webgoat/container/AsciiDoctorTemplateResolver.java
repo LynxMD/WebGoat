@@ -32,13 +32,11 @@ package org.owasp.webgoat.container;
 
 import static org.asciidoctor.Asciidoctor.Factory.create;
 
-import org.springframework.http.HttpHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +48,7 @@ import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.owasp.webgoat.container.asciidoc.*;
 import org.owasp.webgoat.container.i18n.Language;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;

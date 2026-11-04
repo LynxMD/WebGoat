@@ -54,40 +54,36 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http.authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers(
-                        "/favicon.ico",
-                        "/css/**",
-                        "/images/**",
-                        "/js/**",
-                        "/fonts/**",
-                        "/plugins/**",
-                        "/registration",
-                        "/register.mvc",
-                        "/actuator/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
-        .formLogin(
-            login ->
-                login
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/welcome.mvc", true)
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .permitAll())
-        .oauth2Login(
-            oidc -> {
-              oidc.defaultSuccessUrl("/login-oauth.mvc");
-              oidc.loginPage("/login");
-            })
+    return http.authorizeHttpRequests(auth ->
+            auth.requestMatchers(
+                    "/favicon.ico",
+                    "/css/**",
+                    "/images/**",
+                    "/js/**",
+                    "/fonts/**",
+                    "/plugins/**",
+                    "/registration",
+                    "/register.mvc",
+                    "/actuator/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated())
+        .formLogin(login ->
+            login
+                .loginPage("/login")
+                .defaultSuccessUrl("/welcome.mvc", true)
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll())
+        .oauth2Login(oidc -> {
+          oidc.defaultSuccessUrl("/login-oauth.mvc");
+          oidc.loginPage("/login");
+        })
         .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
         .csrf(csrf -> csrf.disable())
         .headers(headers -> headers.disable())
-        .exceptionHandling(
-            handling ->
-                handling.authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login")))
+        .exceptionHandling(handling ->
+            handling.authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login")))
         .build();
   }
 

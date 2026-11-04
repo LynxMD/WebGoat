@@ -18,7 +18,8 @@ public class UsernameMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public PhraseNode process(StructuralNode contentNode, String target, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String target, Map<String, Object> attributes) {
     var auth = SecurityContextHolder.getContext().getAuthentication();
     var username = "unknown";
     if (auth.getPrincipal() instanceof WebGoatUser webGoatUser) {

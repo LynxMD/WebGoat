@@ -69,10 +69,9 @@ public class CourseConfiguration {
       return new ArrayList<>();
     }
     return endpoints.stream()
-        .map(
-            e ->
-                new Assignment(
-                    e.getClass().getSimpleName(), getPath(e.getClass()), getHints(e.getClass())))
+        .map(e ->
+            new Assignment(
+                e.getClass().getSimpleName(), getPath(e.getClass()), getHints(e.getClass())))
         .toList();
   }
 

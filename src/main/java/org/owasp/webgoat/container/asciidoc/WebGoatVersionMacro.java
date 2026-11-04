@@ -16,7 +16,8 @@ public class WebGoatVersionMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public PhraseNode process(StructuralNode contentNode, String target, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String target, Map<String, Object> attributes) {
     var webgoatVersion = EnvironmentExposure.getEnv().getProperty("webgoat.build.version");
 
     // see

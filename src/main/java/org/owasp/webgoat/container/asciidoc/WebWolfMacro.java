@@ -22,7 +22,8 @@ public class WebWolfMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public PhraseNode process(StructuralNode contentNode, String linkText, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String linkText, Map<String, Object> attributes) {
     var env = EnvironmentExposure.getEnv();
     var hostname = env.getProperty("webwolf.url");
     var target = (String) attributes.getOrDefault("target", "home");

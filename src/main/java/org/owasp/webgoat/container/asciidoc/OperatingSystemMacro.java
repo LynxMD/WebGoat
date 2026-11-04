@@ -16,7 +16,8 @@ public class OperatingSystemMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public PhraseNode process(StructuralNode contentNode, String target, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String target, Map<String, Object> attributes) {
     var osName = System.getProperty("os.name");
 
     // see

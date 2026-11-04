@@ -16,7 +16,8 @@ public class WebGoatTmpDirMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public PhraseNode process(StructuralNode contentNode, String target, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String target, Map<String, Object> attributes) {
     var env = EnvironmentExposure.getEnv().getProperty("webgoat.server.directory");
 
     // see

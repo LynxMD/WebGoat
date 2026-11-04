@@ -79,11 +79,10 @@ public class StartLesson {
     course.getLessons().stream()
         .filter(l -> l.getId().equals(lessonName))
         .findFirst()
-        .ifPresent(
-            lesson -> {
-              ws.setCurrentLesson(lesson);
-              model.addObject("lesson", lesson);
-            });
+        .ifPresent(lesson -> {
+          ws.setCurrentLesson(lesson);
+          model.addObject("lesson", lesson);
+        });
 
     return model;
   }

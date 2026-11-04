@@ -100,14 +100,13 @@ public class ProfileUploadBase extends AssignmentEndpoint {
       return Arrays.stream(profileDirectoryFiles)
           .filter(file -> FilenameUtils.isExtension(file.getName(), List.of("jpg", "png")))
           .findFirst()
-          .map(
-              file -> {
-                try (var inputStream = new FileInputStream(profileDirectoryFiles[0])) {
-                  return Base64.getEncoder().encode(FileCopyUtils.copyToByteArray(inputStream));
-                } catch (IOException e) {
-                  return defaultImage();
-                }
-              })
+          .map(file -> {
+            try (var inputStream = new FileInputStream(profileDirectoryFiles[0])) {
+              return Base64.getEncoder().encode(FileCopyUtils.copyToByteArray(inputStream));
+            } catch (IOException e) {
+              return defaultImage();
+            }
+          })
           .orElse(defaultImage());
     } else {
       return defaultImage();
