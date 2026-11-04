@@ -26,6 +26,8 @@ import static java.util.Comparator.comparingLong;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
@@ -48,7 +50,6 @@ import org.owasp.webgoat.lessons.jwt.votes.Vote;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,6 +74,11 @@ public class JWTVotesEndpoint extends AssignmentEndpoint {
 
   private static int totalVotes = 38929;
   private Map<String, Vote> votes = new HashMap<>();
+  private final ObjectMapper objectMapper;
+
+  public JWTVotesEndpoint(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
 
   @PostConstruct
   public void initVotes() {
@@ -141,30 +147,37 @@ public class JWTVotesEndpoint extends AssignmentEndpoint {
 
   @GetMapping("/JWT/votings")
   @ResponseBody
-  public MappingJacksonValue getVotes(
+  public ResponseEntity<String> getVotes(
       @CookieValue(value = "access_token", required = false) String accessToken) {
-    MappingJacksonValue value =
-        new MappingJacksonValue(
-            votes.values().stream()
-                .sorted(comparingLong(Vote::getAverage).reversed())
-                .collect(toList()));
+    Class<?> serializationView;
     if (StringUtils.isEmpty(accessToken)) {
-      value.setSerializationView(Views.GuestView.class);
+      serializationView = Views.GuestView.class;
     } else {
       try {
         Jwt jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parse(accessToken);
         Claims claims = (Claims) jwt.getBody();
         String user = (String) claims.get("user");
         if ("Guest".equals(user) || !validUsers.contains(user)) {
-          value.setSerializationView(Views.GuestView.class);
+          serializationView = Views.GuestView.class;
         } else {
-          value.setSerializationView(Views.UserView.class);
+          serializationView = Views.UserView.class;
         }
       } catch (JwtException e) {
-        value.setSerializationView(Views.GuestView.class);
+        serializationView = Views.GuestView.class;
       }
     }
-    return value;
+    var sortedVotes =
+        votes.values().stream()
+            .sorted(comparingLong(Vote::getAverage).reversed())
+            .collect(toList());
+    // Spring Boot 4 (Jackson 3) no longer applies MappingJacksonValue views; apply the JSON view
+    // by serializing with the Jackson 2 ObjectMapper directly.
+    try {
+      String body = objectMapper.writerWithView(serializationView).writeValueAsString(sortedVotes);
+      return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
+    } catch (JsonProcessingException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 
   @PostMapping(value = "/JWT/votings/{title}")
