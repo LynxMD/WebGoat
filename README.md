@@ -89,7 +89,7 @@ Click the link in the log to start WebGoat.
 
 ### Prerequisites:
 
-* Java 17 or 21
+* Java 25
 * Your favorite IDE
 * Git, or Git support in your IDE
 

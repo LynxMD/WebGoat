@@ -21,7 +21,7 @@ jobs:
             - uses: actions/setup-java@v6.1.0
               with:
                   distribution: 'temurin'
-                  java-version: '21'
+                  java-version: '25'
             - name: Pre-commit checks
               uses: pre-commit/action@v3.0.1
             - name: pre-commit-ci-lite
