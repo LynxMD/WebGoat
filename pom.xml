@@ -141,7 +141,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Spring Boot 4 no longer manages rest-assured; 6.x matches the Groovy 5 that Boot 4 ships -->
     <rest-assured.version>6.3.0</rest-assured.version>
-    <waittimeForServerStart>30</waittimeForServerStart>
+    <waittimeForServerStart>60</waittimeForServerStart>
     <webdriver.version>6.4.0</webdriver.version>
     <webgoat.context>/</webgoat.context>
     <webgoat.sslenabled>false</webgoat.sslenabled>
