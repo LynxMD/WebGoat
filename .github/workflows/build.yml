@@ -16,18 +16,18 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                os: [ windows-latest, ubuntu-latest, macos-13 ]
+                os: [ windows-latest, ubuntu-latest, macos-latest ]
             max-parallel: 1
         steps:
-            -   uses: actions/checkout@v4.1.6
+            -   uses: actions/checkout@v7.0.1
             -   name: Set up JDK 21
-                uses: actions/setup-java@v4.2.1
+                uses: actions/setup-java@v6.1.0
                 with:
                     distribution: 'temurin'
                     java-version: 21
                     architecture: x64
             -   name: Cache Maven packages
-                uses: actions/cache@v4.0.2
+                uses: actions/cache@v6.1.0
                 with:
                     path: ~/.m2
                     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
