@@ -37,11 +37,10 @@ public class Scoreboard {
   public List<Ranking> getRankings() {
     return userRepository.findAll().stream()
         .filter(user -> !user.getUsername().startsWith("csrf-"))
-        .map(
-            user ->
-                new Ranking(
-                    user.getUsername(),
-                    challengesSolved(userTrackerRepository.findByUser(user.getUsername()))))
+        .map(user ->
+            new Ranking(
+                user.getUsername(),
+                challengesSolved(userTrackerRepository.findByUser(user.getUsername()))))
         .sorted((o1, o2) -> o2.getFlagsCaptured().size() - o1.getFlagsCaptured().size())
         .collect(Collectors.toList());
   }

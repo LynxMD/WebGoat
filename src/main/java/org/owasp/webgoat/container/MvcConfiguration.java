@@ -31,6 +31,8 @@
  */
 package org.owasp.webgoat.container;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -257,5 +259,18 @@ public class MvcConfiguration implements WebMvcConfigurer {
   @Bean
   public LabelDebugger labelDebugger() {
     return new LabelDebugger();
+  }
+
+  /**
+   * Spring Boot 4 uses Jackson 3 (tools.jackson) for the HTTP layer. Some components inject a
+   * Jackson 2 {@link ObjectMapper} directly, so this bean provides one. It mirrors the
+   * spring.jackson settings (indented output, ISO dates) and registers the JSR-310 module.
+   */
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper()
+        .findAndRegisterModules()
+        .enable(SerializationFeature.INDENT_OUTPUT)
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 }

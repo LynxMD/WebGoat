@@ -39,16 +39,15 @@ public class ProgressRaceConditionIntegrationTest extends IntegrationTest {
     // A certain amount of parallel calls should fail as optimistic locking in DB is applied
     long countStatusCode500 =
         responses.stream()
-            .filter(
-                r -> {
-                  try {
-                    // System.err.println(r.get().getStatusCode());
-                    return r.get().getStatusCode() != 200;
-                  } catch (InterruptedException | ExecutionException e) {
-                    // System.err.println(e);
-                    throw new IllegalStateException(e);
-                  }
-                })
+            .filter(r -> {
+              try {
+                // System.err.println(r.get().getStatusCode());
+                return r.get().getStatusCode() != 200;
+              } catch (InterruptedException | ExecutionException e) {
+                // System.err.println(e);
+                throw new IllegalStateException(e);
+              }
+            })
             .count();
     System.err.println("counted status 500: " + countStatusCode500);
     Assertions.assertThat(countStatusCode500)

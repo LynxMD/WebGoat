@@ -62,23 +62,20 @@ public class WebSecurityConfig {
               auth.anyRequest().authenticated();
             })
         .csrf(csrf -> csrf.disable())
-        .formLogin(
-            login ->
-                login
-                    .loginPage("/login")
-                    .failureUrl("/login?error=true")
-                    .defaultSuccessUrl("/home", true)
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .permitAll())
-        .oauth2Login(
-            oidc -> {
-              oidc.defaultSuccessUrl("/home");
-            })
+        .formLogin(login ->
+            login
+                .loginPage("/login")
+                .failureUrl("/login?error=true")
+                .defaultSuccessUrl("/home", true)
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll())
+        .oauth2Login(oidc -> {
+          oidc.defaultSuccessUrl("/home");
+        })
         .logout(logout -> logout.deleteCookies("WEBWOLFSESSION").invalidateHttpSession(true))
-        .exceptionHandling(
-            handling ->
-                handling.authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login")))
+        .exceptionHandling(handling ->
+            handling.authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login")))
         .build();
   }
 

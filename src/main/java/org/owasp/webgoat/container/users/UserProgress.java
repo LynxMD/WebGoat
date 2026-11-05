@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -60,6 +61,10 @@ public class UserProgress {
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<LessonProgress> lessonProgress = new HashSet<>();
+
+  // Concurrent requests of one user must not both add a progress row for the same lesson. With
+  // this version, the second save fails with an optimistic locking error instead.
+  @Version private Integer version;
 
   protected UserProgress() {}
 

@@ -65,14 +65,13 @@ public class ReportCardController {
     var userProgress = userProgressRepository.findByUser(webSession.getUserName());
     var lessonStatistics =
         course.getLessons().stream()
-            .map(
-                lesson -> {
-                  var lessonTracker = userProgress.getLessonProgress(lesson);
-                  return new LessonStatistics(
-                      pluginMessages.getMessage(lesson.getTitle()),
-                      lessonTracker.isLessonSolved(),
-                      lessonTracker.getNumberOfAttempts());
-                })
+            .map(lesson -> {
+              var lessonTracker = userProgress.getLessonProgress(lesson);
+              return new LessonStatistics(
+                  pluginMessages.getMessage(lesson.getTitle()),
+                  lessonTracker.isLessonSolved(),
+                  lessonTracker.getNumberOfAttempts());
+            })
             .toList();
     return new ReportCard(
         course.getTotalOfLessons(),

@@ -1,7 +1,8 @@
 package org.owasp.webgoat.container.asciidoc;
 
 import java.util.Map;
-import org.asciidoctor.ast.ContentNode;
+import org.asciidoctor.ast.PhraseNode;
+import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.extension.InlineMacroProcessor;
 
 public class WebGoatTmpDirMacro extends InlineMacroProcessor {
@@ -15,7 +16,8 @@ public class WebGoatTmpDirMacro extends InlineMacroProcessor {
   }
 
   @Override
-  public Object process(ContentNode contentNode, String target, Map<String, Object> attributes) {
+  public PhraseNode process(
+      StructuralNode contentNode, String target, Map<String, Object> attributes) {
     var env = EnvironmentExposure.getEnv().getProperty("webgoat.server.directory");
 
     // see

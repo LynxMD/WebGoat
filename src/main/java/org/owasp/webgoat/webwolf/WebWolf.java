@@ -22,6 +22,8 @@
 
 package org.owasp.webgoat.webwolf;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.owasp.webgoat.webwolf.requests.WebWolfTraceRepository;
 import org.springframework.boot.actuate.web.exchanges.HttpExchangeRepository;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -39,5 +41,18 @@ public class WebWolf {
   @Bean
   public HttpExchangeRepository traceRepository() {
     return new WebWolfTraceRepository();
+  }
+
+  /**
+   * Spring Boot 4 uses Jackson 3 (tools.jackson) for the HTTP layer. Some components inject a
+   * Jackson 2 {@link ObjectMapper} directly, so this bean provides one. It mirrors the
+   * spring.jackson settings (indented output, ISO dates) and registers the JSR-310 module.
+   */
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper()
+        .findAndRegisterModules()
+        .enable(SerializationFeature.INDENT_OUTPUT)
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
   }
 }

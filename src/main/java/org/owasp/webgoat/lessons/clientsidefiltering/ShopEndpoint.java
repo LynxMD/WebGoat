@@ -76,7 +76,11 @@ public class ShopEndpoint {
     return checkoutCodes.get(code).orElse(new CheckoutCode("no", 0));
   }
 
-  @GetMapping(value = "/coupons", produces = MediaType.APPLICATION_JSON_VALUE)
+  // Spring 7 no longer matches a trailing slash implicitly, so both forms are mapped to keep the
+  // lesson's original behaviour.
+  @GetMapping(
+      value = {"/coupons", "/coupons/"},
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public CheckoutCodes all() {
     List<CheckoutCode> all = Lists.newArrayList();
     all.addAll(this.checkoutCodes.getCodes());

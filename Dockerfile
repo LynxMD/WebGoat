@@ -1,8 +1,12 @@
-FROM docker.io/eclipse-temurin:21.0.3_9-jre
+FROM docker.io/eclipse-temurin:25.0.5_8-jre
 LABEL NAME = "WebGoat: A deliberately insecure Web Application"
 LABEL maintainer = "WebGoat team"
 
+# The Ubuntu 26.04 based Temurin image no longer ships curl; the HEALTHCHECK below needs it.
 RUN \
+  apt-get update && \
+  apt-get install -y --no-install-recommends curl && \
+  rm -rf /var/lib/apt/lists/* && \
   useradd -ms /bin/bash webgoat && \
   chgrp -R 0 /home/webgoat && \
   chmod -R g=u /home/webgoat
